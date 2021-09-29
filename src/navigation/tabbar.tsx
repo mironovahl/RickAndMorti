@@ -1,11 +1,13 @@
 import React from 'react'
 import { View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { CharacterIcon } from 'assets/images/icons/character'
 
 import { CharacterScreen } from 'src/modules/character'
 import { EpisodeScreen } from 'src/modules/episode'
 import { LocationScreen } from 'src/modules/location'
+import { CharacterIcon } from 'src/ui/icons/character'
+import { EpisodeIcons } from 'src/ui/icons/episode'
+import { LocationIcon } from 'src/ui/icons/location'
 
 import { Routes } from './routes'
 
@@ -26,7 +28,7 @@ export const TabBar = () => {
         name={Routes.LocationScreen}
         component={LocationScreen}
         options={{
-          tabBarIcon: ({ focused }) => <View />,
+          tabBarIcon: ({ focused }) => <LocationIcon />,
         }}
       />
 
@@ -35,7 +37,7 @@ export const TabBar = () => {
         component={EpisodeScreen}
         options={{
           headerTitle: 'Episode',
-          tabBarIcon: ({ focused }) => <View />,
+          tabBarIcon: ({ focused }) => <EpisodeIcons />,
         }}
       />
     </Tab.Navigator>
