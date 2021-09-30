@@ -1,13 +1,14 @@
 import React from 'react'
+import { View } from 'react-native'
 import styled from 'styled-components/native'
 
 import { colors } from '../theme/colors'
 
 const Wrapper = styled.TouchableOpacity`
   flex: 1;
-  margin: 10px;
+  margin: 8px;
   background-color: ${colors.white};
-  border-radius: 20px;
+  border-radius: 12px;
   overflow: hidden;
   padding-bottom: 12px;
 `
@@ -22,6 +23,7 @@ const Title = styled.Text`
   padding: 0 12px;
   font-family: 'Montserrat-SemiBold';
   font-size: 17px;
+  height: 40px;
 `
 
 const Status = styled.Text`
@@ -32,7 +34,7 @@ const Status = styled.Text`
 `
 
 interface Props {
-  image: string
+  image?: string
   status: string
   title: string
 }
@@ -40,13 +42,17 @@ interface Props {
 export const Card = ({ image, status, title }: Props) => {
   return (
     <Wrapper>
-      <ImageCard
-        source={{
-          uri: image,
-        }}
-      />
+      {image && (
+        <ImageCard
+          source={{
+            uri: image,
+          }}
+        />
+      )}
       <Status>{status}</Status>
-      <Title numberOfLines={2}>{title}</Title>
+      <View style={{ minHeight: 42 }}>
+        <Title numberOfLines={2}>{title}</Title>
+      </View>
     </Wrapper>
   )
 }

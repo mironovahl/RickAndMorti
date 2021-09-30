@@ -17,7 +17,7 @@ const renderItem = (item?: Character | null) => {
 
 export const CharacterScreen = () => {
   const [page, setPage] = useState(1)
-  const { data, fetchMore } = useCharactersQuery({
+  const { data, fetchMore, loading } = useCharactersQuery({
     variables: { page: 1, name: '' },
   })
 
@@ -41,7 +41,7 @@ export const CharacterScreen = () => {
     setPage((prev) => prev + 1)
   }
 
-  if (!data?.characters?.results) {
+  if (!data?.characters?.results || loading) {
     return <Text>Loading</Text>
   }
 
@@ -52,10 +52,10 @@ export const CharacterScreen = () => {
         numColumns={2}
         showsVerticalScrollIndicator={false}
         data={data?.characters?.results}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => renderItem(item)}
         onEndReached={loadMore}
       />
-      <Text>Character</Text>
     </View>
   )
 }

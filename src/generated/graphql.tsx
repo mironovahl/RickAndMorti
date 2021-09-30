@@ -217,6 +217,14 @@ export type EpisodesQueryVariables = Exact<{
 
 export type EpisodesQuery = { __typename?: 'Query', locations: Maybe<{ __typename?: 'Locations', results: Maybe<Array<Maybe<{ __typename?: 'Location', id: Maybe<string>, name: Maybe<string>, type: Maybe<string>, dimension: Maybe<string>, created: Maybe<string>, residents: Array<Maybe<{ __typename?: 'Character', id: Maybe<string>, name: Maybe<string> }>> }>>> }> };
 
+export type LocationsQueryVariables = Exact<{
+  page: Maybe<Scalars['Int']>;
+  filter: Maybe<FilterLocation>;
+}>;
+
+
+export type LocationsQuery = { __typename?: 'Query', locations: Maybe<{ __typename?: 'Locations', results: Maybe<Array<Maybe<{ __typename?: 'Location', id: Maybe<string>, name: Maybe<string>, type: Maybe<string> }>>> }> };
+
 
 export const CharactersDocument = gql`
     query Characters($page: Int, $name: String) {
@@ -309,3 +317,43 @@ export function useEpisodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<E
 export type EpisodesQueryHookResult = ReturnType<typeof useEpisodesQuery>;
 export type EpisodesLazyQueryHookResult = ReturnType<typeof useEpisodesLazyQuery>;
 export type EpisodesQueryResult = Apollo.QueryResult<EpisodesQuery, EpisodesQueryVariables>;
+export const LocationsDocument = gql`
+    query Locations($page: Int, $filter: FilterLocation) {
+  locations(page: $page, filter: $filter) {
+    results {
+      id
+      name
+      type
+    }
+  }
+}
+    `;
+
+/**
+ * __useLocationsQuery__
+ *
+ * To run a query within a React component, call `useLocationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLocationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLocationsQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useLocationsQuery(baseOptions?: Apollo.QueryHookOptions<LocationsQuery, LocationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LocationsQuery, LocationsQueryVariables>(LocationsDocument, options);
+      }
+export function useLocationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LocationsQuery, LocationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LocationsQuery, LocationsQueryVariables>(LocationsDocument, options);
+        }
+export type LocationsQueryHookResult = ReturnType<typeof useLocationsQuery>;
+export type LocationsLazyQueryHookResult = ReturnType<typeof useLocationsLazyQuery>;
+export type LocationsQueryResult = Apollo.QueryResult<LocationsQuery, LocationsQueryVariables>;
