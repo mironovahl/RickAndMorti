@@ -1,16 +1,17 @@
 import { gql } from '@apollo/client'
 
+import { CHARACTER_FIELDS } from '../fragments'
+
 const getEpisodes = gql`
-  query Episodes($page: Int, $filter: FilterLocation) {
-    locations(page: $page, filter: $filter) {
+  ${CHARACTER_FIELDS}
+  query Episodes($page: Int, $filter: FilterEpisode) {
+    episodes(page: $page, filter: $filter) {
       results {
         id
+        episode
         name
-        type
-        dimension
-        residents {
-          id
-          name
+        characters {
+          ...CharacterFields
         }
         created
       }

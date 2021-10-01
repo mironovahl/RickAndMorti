@@ -201,21 +201,23 @@ export type QueryLocationsByIdsArgs = {
   ids: Array<Scalars['ID']>;
 };
 
+export type CharacterFieldsFragment = { __typename?: 'Character', id: Maybe<string>, name: Maybe<string>, status: Maybe<string>, image: Maybe<string> };
+
 export type CharactersQueryVariables = Exact<{
   page: Maybe<Scalars['Int']>;
   name: Maybe<Scalars['String']>;
 }>;
 
 
-export type CharactersQuery = { __typename?: 'Query', characters: Maybe<{ __typename?: 'Characters', results: Maybe<Array<Maybe<{ __typename?: 'Character', id: Maybe<string>, name: Maybe<string>, image: Maybe<string>, status: Maybe<string>, gender: Maybe<string>, location: Maybe<{ __typename?: 'Location', name: Maybe<string> }> }>>> }> };
+export type CharactersQuery = { __typename?: 'Query', characters: Maybe<{ __typename?: 'Characters', results: Maybe<Array<Maybe<{ __typename?: 'Character', id: Maybe<string>, name: Maybe<string>, status: Maybe<string>, image: Maybe<string> }>>> }> };
 
 export type EpisodesQueryVariables = Exact<{
   page: Maybe<Scalars['Int']>;
-  filter: Maybe<FilterLocation>;
+  filter: Maybe<FilterEpisode>;
 }>;
 
 
-export type EpisodesQuery = { __typename?: 'Query', locations: Maybe<{ __typename?: 'Locations', results: Maybe<Array<Maybe<{ __typename?: 'Location', id: Maybe<string>, name: Maybe<string>, type: Maybe<string>, dimension: Maybe<string>, created: Maybe<string>, residents: Array<Maybe<{ __typename?: 'Character', id: Maybe<string>, name: Maybe<string> }>> }>>> }> };
+export type EpisodesQuery = { __typename?: 'Query', episodes: Maybe<{ __typename?: 'Episodes', results: Maybe<Array<Maybe<{ __typename?: 'Episode', id: Maybe<string>, episode: Maybe<string>, name: Maybe<string>, created: Maybe<string>, characters: Array<Maybe<{ __typename?: 'Character', id: Maybe<string>, name: Maybe<string>, status: Maybe<string>, image: Maybe<string> }>> }>>> }> };
 
 export type LocationsQueryVariables = Exact<{
   page: Maybe<Scalars['Int']>;
@@ -223,25 +225,25 @@ export type LocationsQueryVariables = Exact<{
 }>;
 
 
-export type LocationsQuery = { __typename?: 'Query', locations: Maybe<{ __typename?: 'Locations', results: Maybe<Array<Maybe<{ __typename?: 'Location', id: Maybe<string>, name: Maybe<string>, type: Maybe<string> }>>> }> };
+export type LocationsQuery = { __typename?: 'Query', locations: Maybe<{ __typename?: 'Locations', results: Maybe<Array<Maybe<{ __typename?: 'Location', id: Maybe<string>, name: Maybe<string>, type: Maybe<string>, dimension: Maybe<string>, residents: Array<Maybe<{ __typename?: 'Character', id: Maybe<string>, name: Maybe<string>, status: Maybe<string>, image: Maybe<string> }>> }>>> }> };
 
-
+export const CharacterFieldsFragmentDoc = gql`
+    fragment CharacterFields on Character {
+  id
+  name
+  status
+  image
+}
+    `;
 export const CharactersDocument = gql`
     query Characters($page: Int, $name: String) {
   characters(page: $page, filter: {name: $name}) {
     results {
-      id
-      name
-      image
-      status
-      gender
-      location {
-        name
-      }
+      ...CharacterFields
     }
   }
 }
-    `;
+    ${CharacterFieldsFragmentDoc}`;
 
 /**
  * __useCharactersQuery__
@@ -272,22 +274,20 @@ export type CharactersQueryHookResult = ReturnType<typeof useCharactersQuery>;
 export type CharactersLazyQueryHookResult = ReturnType<typeof useCharactersLazyQuery>;
 export type CharactersQueryResult = Apollo.QueryResult<CharactersQuery, CharactersQueryVariables>;
 export const EpisodesDocument = gql`
-    query Episodes($page: Int, $filter: FilterLocation) {
-  locations(page: $page, filter: $filter) {
+    query Episodes($page: Int, $filter: FilterEpisode) {
+  episodes(page: $page, filter: $filter) {
     results {
       id
+      episode
       name
-      type
-      dimension
-      residents {
-        id
-        name
+      characters {
+        ...CharacterFields
       }
       created
     }
   }
 }
-    `;
+    ${CharacterFieldsFragmentDoc}`;
 
 /**
  * __useEpisodesQuery__
@@ -324,10 +324,14 @@ export const LocationsDocument = gql`
       id
       name
       type
+      dimension
+      residents {
+        ...CharacterFields
+      }
     }
   }
 }
-    `;
+    ${CharacterFieldsFragmentDoc}`;
 
 /**
  * __useLocationsQuery__
